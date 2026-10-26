@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Weerachai Virtual PC</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#101010;color:white;
+ font-family:Arial,sans-serif;text-align:center
+}
+header{
+ background:#e83d3d;padding:20px;
+ font-size:22px;font-weight:bold
+}
+.container{max-width:550px;margin:55px auto;padding:20px}
+.logo{font-size:30px;font-weight:bold;margin-bottom:40px}
+.card{background:#252525;padding:25px 15px;border-radius:18px}
+.label{color:#bbb}
+.address{
+ font-size:clamp(28px,8vw,42px);
+ color:#ff4545;font-weight:bold;
+ margin:25px 0;letter-spacing:2px
+}
+button{
+ background:#e83d3d;color:white;border:0;
+ border-radius:10px;padding:15px;
+ font-size:16px;margin:7px;cursor:pointer
+}
+.secondary{background:#444}
+.status{margin-top:20px;color:#aaa}
+footer{margin-top:50px;color:#777;font-size:13px}
+</style>
+</head>
+<body>
+<header>FREE VIRTUAL PC</header>
+<div class="container">
+<div class="logo">◆ WEERACHAI PC</div>
+<div class="card">
+<h2>Your PC Address</h2>
+<div class="label">รหัสประจำเครื่อง Virtual PC</div>
+<div class="address" id="address">กำลังสร้าง...</div>
+<button onclick="generateAddress()">+ สร้าง Address ใหม่</button>
+<button class="secondary" onclick="copyAddress()">คัดลอก Address</button>
+<div class="status" id="status">Virtual PC Ready</div>
+</div>
+<footer>WEERACHAI17254 | Virtual Gaming PC</footer>
+</div>
+<script>
+function generateAddress(){
+ const numbers=new Uint32Array(1);
+ crypto.getRandomValues(numbers);
+ const id=String(numbers[0]%10000000000).padStart(10,"0");
+ const code=id.slice(0,3)+" "+id.slice(3,6)+" "+id.slice(6);
+ document.getElementById("address").textContent=code;
+ localStorage.setItem("virtualPCAddress",code);
+ document.getElementById("status").textContent="สร้าง Address สำเร็จ!";
+}
+function copyAddress(){
+ const code=document.getElementById("address").textContent;
+ navigator.clipboard.writeText(code).then(()=>{
+ document.getElementById("status").textContent="คัดลอกแล้ว!";
+ });
+}
+const saved=localStorage.getItem("virtualPCAddress");
+if(saved){
+ document.getElementById("address").textContent=saved;
+}else{
+ generateAddress();
+}
+</script>
+</body>
+</html>
